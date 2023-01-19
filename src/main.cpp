@@ -61,7 +61,7 @@ void loop()
 
   Serial.println("Entered i<1");
   //random spins
-  while ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >=60 ) && i<1)
+  if ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >=60 ) && i<1)
   {
   getSensorDistances();
    rand_no=random(0, 100);
@@ -69,10 +69,10 @@ void loop()
     if (rand_no <=24 ){
     Serial.println(" LEFT FOR i<=1");
     moveMotors(TURN_LEFT);
-    delay(240);
+    delay(2400);
     }else if(rand_no >= 25 && rand_no <= 49){
     moveMotors(TURN_RIGHT);
-    delay(240);
+    delay(2400);
     }else if (rand_no >=50){
       i++;
     }
@@ -82,7 +82,7 @@ void loop()
   Serial.println("ADDED i++");
   if (i >= 4){
     Serial.println("i is reset to 0");
-    
+    i =0;
   }
 
 //------------------------------------------------------------------------------------------------
