@@ -6,7 +6,7 @@ Tasks:
 
 int distance_front_left, distance_front_right, distance_side_left, distance_side_right, distance_back, front_sensors;
 
-int rand_number = 0;
+int rand_no = 0;
 int sensor_checker_status;
 int counter = 0;
 
@@ -20,7 +20,7 @@ int incomingID, incomingData1, incomingData2;
 
 int sensor_checker(int wait_time);
 void getSensorDistances();
-
+void obsctacleAvoidance();
 
 void setup() {
   Serial.begin(9600);
@@ -42,45 +42,50 @@ void setup() {
     delay(1000);
     moveMotors(STOP_ALL);
   #endif
+
+  randomSeed(analogRead(36));
 }
  
 void loop() 
 {
 
   getSensorDistances();
+  rand_no=random(0, 100);
+
 
   //TODO - if back,side,front sensors trigger at the same instance stop 
-  //side_correction
+  
+  Serial.println("OB_Avoidance");
+  obsctacleAvoidance();
+  
 
-  if (distance_side_right <= 70 )
+  Serial.println("Entered i<1");
+  //random spins
+  while ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >=60 ) && i<1)
   {
+  getSensorDistances();
+   rand_no=random(0, 100);
+
+    if (rand_no <=24 ){
+    Serial.println(" LEFT FOR i<=1");
     moveMotors(TURN_LEFT);
     delay(240);
-   // moveMotors(STOP_ALL);
-  }
-  else if(distance_side_left <= 70)
-  {
+    }else if(rand_no >= 25 && rand_no <= 49){
     moveMotors(TURN_RIGHT);
     delay(240);
-   // moveMotors(STOP_ALL);
+    }else if (rand_no >=50){
+      i++;
+    }
   }
 
-  //front correction
-  if (distance_front_right >=31 && distance_front_left >= 31)
-    {
-      moveMotors(GO_FORWARD);
-      delay(240);
-    //  moveMotors(STOP_ALL);
-    }
-    else
-    {
-      moveMotors(GO_BACKWARD);
-      delay(240);
-      // moveMotors(STOP_ALL);
-    }
+  i++;
+  Serial.println("ADDED i++");
+  if (i >= 4){
+    Serial.println("i is reset to 0");
+    
+  }
 
-      moveMotors(STOP_ALL);
-
+//------------------------------------------------------------------------------------------------
 //  //if inbetween these 51-81cm then move backward
 //   else if(distance_front_right >=51 || distance_front_left >= 51 && p<4)
 //     {
@@ -97,18 +102,18 @@ void loop()
 //     }
     
 //   getSensorDistances();
-//   if(p>=4)
+//   
+//       delay(140);
+//       }
+//       //TODO TURN_RIGHT
+//       //only be able to turn if the condition that an obstacle is not in the way
+//       if(distance_side_right >= 5if(p>=4)
 //   {
 //     Serial.println("Activated P");
 //       getSensorDistances();
 //       if((distance_front_right && distance_front_left )<= 90) //&& back is free
 //       {
-//       moveMotors(GO_BACKWARD);
-//       delay(140);
-//       }
-//       //TODO TURN_RIGHT
-//       //only be able to turn if the condition that an obstacle is not in the way
-//       if(distance_side_right >= 50)
+//       moveMotors(GO_BACKWARD);0)
 //       {  
 //       moveMotors(TURN_RIGHT);F.
 //       delay(500);
@@ -176,6 +181,61 @@ void loop()
 
 
 
+void obsctacleAvoidance(){
+  
+  //TODO - if back,side,front sensors trigger at the same instance stop 
+
+  //side_correction
+  if (distance_side_right <= 70 )
+  {
+    moveMotors(TURN_LEFT);
+    delay(240);
+   // moveMotors(STOP_ALL);
+  }
+  else if(distance_side_left <= 70)
+  {
+    moveMotors(TURN_RIGHT);
+    delay(240);
+   // moveMotors(STOP_ALL);
+  }
+
+  //front correction
+  if (distance_front_right >=81 && distance_front_left >= 81)
+    {
+      
+      moveMotors(GO_FORWARD);
+      delay(240);
+    //  moveMotors(STOP_ALL);
+    }
+    else{  //TODO- if back is free
+      
+      moveMotors(GO_BACKWARD);
+      delay(240);
+      // moveMotors(STOP_ALL);
+      
+      p++;
+      Serial.print("p= ");
+      Serial.println(p);
+    }
+
+    if( p >= 3) //&& back is free
+      {
+      moveMotors(GO_BACKWARD);
+      delay(500);
+      
+      if(distance_side_right >= 60)
+      {
+      moveMotors(TURN_RIGHT);
+      delay(500);
+      }else if(distance_side_left >=60){
+      moveMotors(TURN_LEFT);
+      delay(500);
+      }
+
+      p = 0;
+      }
+}
+
 void getSensorDistances() {
   distance_front_right = getDistance(sensorFrontRightTrig, sensorFrontRightEcho);
   distance_front_left = getDistance(sensorFrontLeftTrig, sensorFrontLeftEcho);
@@ -195,10 +255,7 @@ void getSensorDistances() {
     Serial.print(distance_side_left);
     Serial.print("|   cm back: ");
     Serial.println(distance_back);
-    Serial.print("Random number: ");
-    Serial.println(rand_number);
+  
   #endif
-
-
 
 }
