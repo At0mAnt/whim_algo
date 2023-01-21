@@ -1,10 +1,5 @@
 #include "main.h"
 
-/*
-Tasks:
-*/
-
-int distance_front_left, distance_front_right, distance_side_left, distance_side_right, distance_back, front_sensors;
 
 int rand_no = 0;
 int sensor_checker_status;
@@ -218,16 +213,22 @@ void obsctacleAvoidance(){
       delay(240);
     //  moveMotors(STOP_ALL);
     }
-    else{  //TODO- if back is free
-      
+
+    if(distance_back >= 150 && distance_front_right <=81)                                        //TODO- if back is free to move
+    {  
       moveMotors(GO_BACKWARD);
-      delay(240);
+      delay(540);
       // moveMotors(STOP_ALL);
       
       p++;
       Serial.print("p= ");
       Serial.println(p);
+    } else if ((distance_back >= 81 && distance_back <= 149)){
+
+      moveMotors(GO_BACKWARD);
+      delay(200);
     }
+
 
     if( p >= 3) //&& back is free
       {
@@ -252,8 +253,7 @@ void getSensorDistances() {
   distance_front_left = getDistance(sensorFrontLeftTrig, sensorFrontLeftEcho);
   distance_side_right = getDistance(sensorSideRightTrig, sensorSideRightEcho);
   distance_side_left = getDistance(sensorSideLeftTrig, sensorSideLeftEcho);
-
-  //distance_back = getDistance(sensorBackTrig, sensorBackEcho); 
+  distance_back = getDistance(sensorBackTrig, sensorBackEcho); 
 
   #if _DEBUGMODE
     Serial.print("cm front right: ");

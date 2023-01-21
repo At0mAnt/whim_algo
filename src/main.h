@@ -44,4 +44,6 @@ volatile long echo_end = 0;                           // Records end of echo pul
 volatile long echo_duration = 0;                      // Duration - difference between end and start
 volatile int trigger_time_count = 0;                  // Count down counter to trigger pulse time
 
+int distance_front_left, distance_front_right, distance_side_left, distance_side_right, distance_back, front_sensors;
+
 #endif

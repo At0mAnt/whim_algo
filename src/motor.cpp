@@ -11,8 +11,8 @@ void initMotors() {
   pinMode(motorRightA, OUTPUT);
   pinMode(motorRightB, OUTPUT);
 
-  analogWrite(motorLeftPWM, 130);
-  analogWrite(motorRightPWM, 130); //motors are too fast
+   analogWrite(motorLeftPWM, 140);
+   analogWrite(motorRightPWM, 140); //motors are too fast
   //potentialy use motor stop instead of delay 
 }
 
