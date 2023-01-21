@@ -42,9 +42,9 @@ void setup() {
 
   #if _DEBUGMODE
     moveMotors(GO_FORWARD);
-    delay(1000);
+    delay(2000);
     moveMotors(GO_BACKWARD);
-    delay(1000);
+    delay(2000);
     moveMotors(STOP_ALL);
   #endif
 
@@ -76,10 +76,10 @@ void loop()
     if (rand_no <=24 ){
     Serial.println(" LEFT FOR i<=1");
     moveMotors(TURN_LEFT);
-    delay(2400);
+    delay(50); //2400
     }else if(rand_no >= 25 && rand_no <= 49){
     moveMotors(TURN_RIGHT);
-    delay(2400);
+    delay(50); //2400
     }else if (rand_no >=50){
       i++;
     }
@@ -92,7 +92,7 @@ void loop()
     i =0;
   }
   motorMovement(STOP_ALL);
-  delay(240);
+  delay(50);
 
 //------------------------------------------------------------------------------------------------
 //  //if inbetween these 51-81cm then move backward
@@ -196,13 +196,13 @@ void obsctacleAvoidance(){
   if (distance_side_right <= 70 )
   {
     moveMotors(TURN_LEFT);
-    delay(240);
+    delay(50);
    // moveMotors(STOP_ALL);
   }
   else if(distance_side_left <= 70)
   {
     moveMotors(TURN_RIGHT);
-    delay(240);
+    delay(50);
    // moveMotors(STOP_ALL);
   }
 
@@ -210,35 +210,35 @@ void obsctacleAvoidance(){
   if (distance_front_right >=81 && distance_front_left >= 81)
     { 
       moveMotors(GO_FORWARD);
-      delay(240);
+      delay(50);
     //  moveMotors(STOP_ALL);
     }
 
-    if(distance_back >= 150 && distance_front_right <=81)                                        //TODO- if back is free to move
+    if(distance_back >= 150 && distance_front_right <=80)                                        //TODO- if back is free to move
     {  
       moveMotors(GO_BACKWARD);
-      delay(540);
+      delay(50);
       // moveMotors(STOP_ALL);
       
       p++;
       Serial.print("p= ");
       Serial.println(p);
-    } else if ((distance_back >= 81 && distance_back <= 149)){
+    } else if ((distance_back >= 79 && distance_back <= 149)){
 
       moveMotors(GO_BACKWARD);
-      delay(200);
+      delay(50);
     }
 
 
     if( p >= 3) //&& back is free
       {
       moveMotors(GO_BACKWARD);
-      delay(500);
+      delay(50);
       
       if(distance_side_right >= 60)
       {
       moveMotors(TURN_RIGHT);
-      delay(500);
+      delay(50);
       }else if(distance_side_left >=60){
       moveMotors(TURN_LEFT);
       delay(500);

@@ -9,8 +9,8 @@
 
 #define sensorSideLeftEcho 26
 #define sensorSideLeftTrig 27
-#define sensorSideRightEcho 14
-#define sensorSideRightTrig 12
+#define sensorSideRightEcho 14 //14-21
+#define sensorSideRightTrig 12 //12-5
 
 #define sensorBackEcho 19
 #define sensorBackTrig 18
