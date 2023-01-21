@@ -13,10 +13,11 @@ int counter = 0;
 int i=0; //counter
 int p=0; //counter 2
 
-String success;
-esp_now_peer_info_t peerInfo;
-struct_message incomingReadings;
-int incomingID, incomingData1, incomingData2;
+// // Setting PWM properties
+// const int freq = 30000;
+// const int pwmChannel = 0;
+// const int resolution = 8;
+// int dutyCycle = 100;
 
 int sensor_checker(int wait_time);
 void getSensorDistances();
@@ -24,7 +25,8 @@ void obsctacleAvoidance();
 
 void setup() {
   Serial.begin(9600);
-  
+
+
   /*Inits*/
   Serial.println("INITS");
   initMotors();
@@ -33,7 +35,15 @@ void setup() {
   Serial.println("Sensors are initialised.");
   //randomSeed(analogRead(36));
   Serial.println("Random is initialised.");
+  
+  // // configure LED PWM functionalitites 
+  // ledcSetup(pwmChannel, freq, resolution);
 
+  // // attach the channel to the GPIO to be controlled
+  // ledcAttachPin(motorLeftPWM, pwmChannel);
+  //  // attach the channel to the GPIO to be controlled
+  // ledcAttachPin(motorRightPWM, pwmChannel);
+  
 
   #if _DEBUGMODE
     moveMotors(GO_FORWARD);
@@ -52,13 +62,15 @@ void loop()
   getSensorDistances();
   rand_no=random(0, 100);
 
+  // //change duty cycle 
+  // ledcWrite(pwmChannel, dutyCycle);
+
 
   //TODO - if back,side,front sensors trigger at the same instance stop 
   
   Serial.println("OB_Avoidance");
   obsctacleAvoidance();
   
-
   Serial.println("Entered i<1");
   //random spins
   if ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >=60 ) && i<1)
@@ -84,6 +96,8 @@ void loop()
     Serial.println("i is reset to 0");
     i =0;
   }
+  motorMovement(STOP_ALL);
+  delay(240);
 
 //------------------------------------------------------------------------------------------------
 //  //if inbetween these 51-81cm then move backward
@@ -179,8 +193,6 @@ void loop()
 
 }
 
-
-
 void obsctacleAvoidance(){
   
   //TODO - if back,side,front sensors trigger at the same instance stop 
@@ -201,8 +213,7 @@ void obsctacleAvoidance(){
 
   //front correction
   if (distance_front_right >=81 && distance_front_left >= 81)
-    {
-      
+    { 
       moveMotors(GO_FORWARD);
       delay(240);
     //  moveMotors(STOP_ALL);
