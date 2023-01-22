@@ -5,7 +5,7 @@ int rand_no = 0;
 int sensor_checker_status;
 int counter = 0;
 
-const int spin_dist = 80;
+const int spin_dist = 100;
 
 int i=0; //counter
 int p=0; //counter 2
@@ -22,7 +22,6 @@ void obsctacleAvoidance();
 
 void setup() {
   Serial.begin(9600);
-
 
   /*Inits*/
   Serial.println("INITS");
@@ -71,7 +70,7 @@ void loop()
   
   Serial.println("Entered i<1");
   //random spins
-  if ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >= spin_dist ) && i<1) //spin_dist 80 
+  if (((distance_front_right && distance_front_left && distance_side_right && distance_side_left && distance_back) >= spin_dist ) && i<1) //spin_dist 80 
   {
   getSensorDistances();
    rand_no=random(0, 100);
@@ -221,7 +220,7 @@ void obsctacleAvoidance(){
     //  moveMotors(STOP_ALL);
     }
     getSensorDistances();
-    if(distance_back >= 150 && distance_front_right <=100)             //TODO- also add distance front left
+    if(distance_back >= 150 && distance_front_right <=100 && distance_front_left <=100)             //TODO- also add distance front left
     {  
       Serial.println("GET SENSOR DIST");
       Serial.println("'IF STATEMENT'- BACK 450ms");
@@ -234,11 +233,11 @@ void obsctacleAvoidance(){
       {   
       Serial.println("TURN RIGHT 500ms");
         moveMotors(TURN_LEFT);
-        delay(500);
+        delay(700);
       }else if(distance_side_left <= 100){
         Serial.println("TURN LEFT 500ms");
         moveMotors(TURN_RIGHT);
-        delay(500);
+        delay(700);
       }
 
       p++;
@@ -250,7 +249,7 @@ void obsctacleAvoidance(){
     else if ((distance_back >= 79 && distance_back <= 149)){
      Serial.println("Between 79cm - 149cm");
      getSensorDistances();
-     while(distance_back >= 80 ){
+     while(distance_back >= 80 && (distance_front_right || distance_front_left) <= 250 ){
       getSensorDistances();
       Serial.println("WHILE_BACK- LINE 254");
       moveMotors(GO_BACKWARD);
@@ -262,11 +261,11 @@ void obsctacleAvoidance(){
       {   
       Serial.println("TURN RIGHT 200ms");
         moveMotors(TURN_LEFT);
-        delay(1000);
+        delay(1400);
       }else if(distance_side_left <= 100){
         Serial.println("TURN LEFT 200ms");
         moveMotors(TURN_RIGHT);
-        delay(1000);
+        delay(1400);
       }
     }
 

@@ -11,8 +11,8 @@ void initMotors() {
   pinMode(motorRightA, OUTPUT);
   pinMode(motorRightB, OUTPUT);
 
-   analogWrite(motorLeftPWM, 140);
-   analogWrite(motorRightPWM, 140); //motors are too fast
+   analogWrite(motorLeftPWM, 180);
+   analogWrite(motorRightPWM, 180); //motors are too fast
   //potentialy use motor stop instead of delay 
 }
 
@@ -80,25 +80,25 @@ void moveMotors(int motorMovement) {
     case ROTATE_ON_LEFT_FWD:
       Serial.println("FORWARD ROTATION LWO");//LEFT WHEEL ONLY
       wSD(STOP_R);
-      wSD(ROTATE_ON_LEFT_FWD);
+      wSD(SPIN_L_FORWARD);
       delay(50);
       break;
     case ROTATE_ON_RIGHT_FWD:
       Serial.println("FORWARD ROTATION RWO");//RIGHT WHEEL ONLY
       wSD(STOP_L);
-      wSD(ROTATE_ON_RIGHT_FWD);
+      wSD(SPIN_R_FORWARD);
       delay(50);
       break;
     case ROTATE_ON_LEFT_BWD:
       Serial.println("BACKWARD ROTATION LWO");//LEFT WHEEL ONLY
       wSD(STOP_R);
-      wSD(ROTATE_ON_LEFT_BWD);
+      wSD(SPIN_L_BACK);
       delay(50);
       break;
     case ROTATE_ON_RIGHT_BWD:
       Serial.println("BACKWARD ROTATION RWO");//RIGHT WHEEL ONLY
       wSD(STOP_L);
-      wSD(ROTATE_ON_RIGHT_BWD);
+      wSD(SPIN_R_BACK);
       delay(50);
       break;
     case STOP_ALL:
