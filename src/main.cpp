@@ -80,6 +80,7 @@ void loop()
     moveMotors(TURN_LEFT);
     delay(2000); //2400
     }else if(rand_no >= 25 && rand_no <= 49){
+      Serial.println(" RIGHT FOR i<=1");
     moveMotors(TURN_RIGHT);
     delay(2000); //2400
     }else if (rand_no >=50){
@@ -89,7 +90,7 @@ void loop()
 
   i++;
   Serial.println("ADDED i++");
-  if (i >= 4){
+  if (i >= 20){
     Serial.println("i is reset to 0");
     i =0;
   }
@@ -211,7 +212,7 @@ void obsctacleAvoidance(){
   }
 
   //front loop condition
-  while (distance_front_right >=81 && distance_front_left >= 81)
+  while (distance_front_right >=151 && distance_front_left >= 151)
     { 
       getSensorDistances();
       Serial.print("Front WHILE LOOP");
@@ -220,12 +221,19 @@ void obsctacleAvoidance(){
     //  moveMotors(STOP_ALL);
     }
     getSensorDistances();
-    if(distance_back >= 150 && distance_front_right <=100 && distance_front_left <=100)             //TODO- also add distance front left
+    if(distance_back >= 150 && (distance_front_right <=150 || distance_front_left <=150))             //TODO- also add distance front left
     {  
+      //edited
+      
       Serial.println("GET SENSOR DIST");
-      Serial.println("'IF STATEMENT'- BACK 450ms");
+      getSensorDistances();
+      Serial.println("'WHILE IF STATEMENT'- BACK 3580ms");
+      if((distance_back >= 80 || (distance_front_right || distance_front_left) <= 250 ))
       moveMotors(GO_BACKWARD);
-      delay(450);
+      
+      delay(3580);
+
+      //edited
       // moveMotors(STOP_ALL);
       getSensorDistances();
       Serial.println("GET SENSOR DIST");
@@ -233,11 +241,11 @@ void obsctacleAvoidance(){
       {   
       Serial.println("TURN RIGHT 500ms");
         moveMotors(TURN_LEFT);
-        delay(700);
+        delay(2700);
       }else if(distance_side_left <= 100){
         Serial.println("TURN LEFT 500ms");
         moveMotors(TURN_RIGHT);
-        delay(700);
+        delay(2700);
       }
 
       p++;
@@ -270,20 +278,20 @@ void obsctacleAvoidance(){
     }
 
     getSensorDistances();
-    if( (p >= 3) && (distance_back <= 81) ) //&& back is free
+    if( (p >= 3) && (distance_back >= 181) ) //&& back is free
       Serial.println("p>=3 and back distance is less than 81cm");
       {
       moveMotors(GO_BACKWARD);
-      delay(350);
+      delay(3350);
       
       getSensorDistances();
       if(distance_side_right >= 60)
       {
       moveMotors(TURN_RIGHT);
-      delay(250);
+      delay(3550);
       }else if(distance_side_left >=60){
       moveMotors(TURN_LEFT);
-      delay(500);
+      delay(3500);
       }
 
       p = 0;
