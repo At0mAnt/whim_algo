@@ -5,6 +5,8 @@ int rand_no = 0;
 int sensor_checker_status;
 int counter = 0;
 
+const int spin_dist = 80;
+
 int i=0; //counter
 int p=0; //counter 2
 
@@ -65,10 +67,11 @@ void loop()
   
   Serial.println("OB_Avoidance");
   obsctacleAvoidance();
+
   
   Serial.println("Entered i<1");
   //random spins
-  if ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >=60 ) && i<1)
+  if ((distance_front_right && distance_front_left && distance_side_right && distance_side_left >= spin_dist ) && i<1) //spin_dist 80 
   {
   getSensorDistances();
    rand_no=random(0, 100);
@@ -76,10 +79,10 @@ void loop()
     if (rand_no <=24 ){
     Serial.println(" LEFT FOR i<=1");
     moveMotors(TURN_LEFT);
-    delay(50); //2400
+    delay(2000); //2400
     }else if(rand_no >= 25 && rand_no <= 49){
     moveMotors(TURN_RIGHT);
-    delay(50); //2400
+    delay(2000); //2400
     }else if (rand_no >=50){
       i++;
     }
@@ -188,57 +191,97 @@ void loop()
 
 }
 
+void getSensorDistances();
+
 void obsctacleAvoidance(){
   
   //TODO - if back,side,front sensors trigger at the same instance stop 
 
   //side_correction
-  if (distance_side_right <= 70 )
+  if (distance_side_right <= 70 ) //make 100 for outside
   {
     moveMotors(TURN_LEFT);
-    delay(50);
+    delay(200);
    // moveMotors(STOP_ALL);
   }
-  else if(distance_side_left <= 70)
+  else if(distance_side_left <= 70) //make 100 for outside
   {
     moveMotors(TURN_RIGHT);
-    delay(50);
+    delay(200);
    // moveMotors(STOP_ALL);
   }
 
-  //front correction
-  if (distance_front_right >=81 && distance_front_left >= 81)
+  //front loop condition
+  while (distance_front_right >=81 && distance_front_left >= 81)
     { 
+      getSensorDistances();
+      Serial.print("Front WHILE LOOP");
       moveMotors(GO_FORWARD);
-      delay(50);
+      delay(150);
     //  moveMotors(STOP_ALL);
     }
-
-    if(distance_back >= 150 && distance_front_right <=80)                                        //TODO- if back is free to move
+    getSensorDistances();
+    if(distance_back >= 150 && distance_front_right <=100)             //TODO- also add distance front left
     {  
+      Serial.println("GET SENSOR DIST");
+      Serial.println("'IF STATEMENT'- BACK 450ms");
       moveMotors(GO_BACKWARD);
-      delay(50);
+      delay(450);
       // moveMotors(STOP_ALL);
-      
+      getSensorDistances();
+      Serial.println("GET SENSOR DIST");
+      if (distance_side_right <= 100) 
+      {   
+      Serial.println("TURN RIGHT 500ms");
+        moveMotors(TURN_LEFT);
+        delay(500);
+      }else if(distance_side_left <= 100){
+        Serial.println("TURN LEFT 500ms");
+        moveMotors(TURN_RIGHT);
+        delay(500);
+      }
+
       p++;
       Serial.print("p= ");
       Serial.println(p);
-    } else if ((distance_back >= 79 && distance_back <= 149)){
-
+      
+    } 
+    
+    else if ((distance_back >= 79 && distance_back <= 149)){
+     Serial.println("Between 79cm - 149cm");
+     getSensorDistances();
+     while(distance_back >= 80 ){
+      getSensorDistances();
+      Serial.println("WHILE_BACK- LINE 254");
       moveMotors(GO_BACKWARD);
-      delay(50);
+      delay(250);
+     }
+      getSensorDistances();
+      Serial.println("GET SENSOR DIST");
+      if (distance_side_right <= 100) 
+      {   
+      Serial.println("TURN RIGHT 200ms");
+        moveMotors(TURN_LEFT);
+        delay(1000);
+      }else if(distance_side_left <= 100){
+        Serial.println("TURN LEFT 200ms");
+        moveMotors(TURN_RIGHT);
+        delay(1000);
+      }
     }
 
-
-    if( p >= 3) //&& back is free
+    getSensorDistances();
+    if( (p >= 3) && (distance_back <= 81) ) //&& back is free
+      Serial.println("p>=3 and back distance is less than 81cm");
       {
       moveMotors(GO_BACKWARD);
-      delay(50);
+      delay(350);
       
+      getSensorDistances();
       if(distance_side_right >= 60)
       {
       moveMotors(TURN_RIGHT);
-      delay(50);
+      delay(250);
       }else if(distance_side_left >=60){
       moveMotors(TURN_LEFT);
       delay(500);
